@@ -1,12 +1,13 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
-import { route } from './routes'
+import { getUserById, createUser } from './routes'
+import { memo } from 'hono/jsx'
 
 const app = new OpenAPIHono()
 
 app.use('/docs', cors())
 app.openapi(
-    route,
+    getUserById,
     (c) => {
         const { id } = c.req.valid('param')
         return c.jsonT({
@@ -24,7 +25,27 @@ app.openapi(
             }, 400)
         }
     }
-)
+);
+
+app.openapi(
+    createUser,
+    (c) => {
+        const { name, age } = c.req.valid('json')
+        return c.jsonT({
+            id: '123',
+            name,
+            age,
+        })
+    },
+    (result, c) => {
+        if (!result.success) {
+            return c.jsonT({
+                code: 400,
+                message: 'validation error',
+            }, 400)
+        }
+    }
+);
 
 app.doc('/docs', {
     openapi: '3.0.0',

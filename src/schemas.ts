@@ -29,6 +29,16 @@ export const UserSchema = z
     })
     .openapi('User')
 
+export const CreateUserSchema = z
+    .object({
+        name: z.string().openapi({
+            example: 'zztkm'
+        }),
+        age: z.number().openapi({
+            example: 25
+        }),
+    }).openapi('CreateUser')
+
 export const ErrorSchema = z
     .object({
         code: z.number().openapi({
