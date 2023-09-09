@@ -1,5 +1,11 @@
 import { z } from '@hono/zod-openapi'
 
+export const HealthCheckSchema = z.object({
+    status: z.string().openapi({
+        example: 'ok',
+    }),
+}).openapi('HealthCheck')
+
 
 export const ParamsSchema = z.object({
     id: z

@@ -1,11 +1,30 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
-import { getUserById, createUser } from './routes'
-import { memo } from 'hono/jsx'
+import { healthCheck, getUserById, createUser } from './routes'
 
 const app = new OpenAPIHono()
+const registry = app.openAPIRegistry
+
+registry.registerComponent(
+    'securitySchemes',
+    'bearerAuth', {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'JWT token',
+    },
+)
 
 app.use('/docs', cors())
+app.openapi(
+    healthCheck,
+    (c) => {
+        return c.jsonT({
+            status: 'ok',
+        })
+    },
+);
+
 app.openapi(
     getUserById,
     (c) => {
@@ -52,7 +71,7 @@ app.doc('/docs', {
     info: {
         version: '0.1.0',
         title: 'kiboshin kigdom',
-    }
+    },
 })
 
 export default app
