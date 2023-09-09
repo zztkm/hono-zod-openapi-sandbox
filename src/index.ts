@@ -1,6 +1,11 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
-import { healthCheck, getUserById, createUser } from './routes'
+import {
+    healthCheck,
+    getUserById,
+    createUser,
+    listUser,
+} from './routes'
 
 const app = new OpenAPIHono()
 const registry = app.openAPIRegistry
@@ -36,6 +41,25 @@ app.openapi(
         })
     },
     // hook
+    (result, c) => {
+        if (!result.success) {
+            return c.jsonT({
+                code: 400,
+                message: 'validation error',
+            }, 400)
+        }
+    }
+);
+
+app.openapi(
+    listUser,
+    (c) => {
+        return c.jsonT([{
+            id: '123',
+            name: 'zztkm',
+            age: 25,
+        }])
+    },
     (result, c) => {
         if (!result.success) {
             return c.jsonT({

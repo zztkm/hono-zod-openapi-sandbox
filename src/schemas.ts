@@ -35,6 +35,10 @@ export const UserSchema = z
     })
     .openapi('User')
 
+export const UserListSchema = z
+    .array(UserSchema)
+    .openapi('UserListSchema')
+
 export const CreateUserSchema = z
     .object({
         name: z.string().openapi({

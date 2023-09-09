@@ -4,11 +4,13 @@ import {
     ParamsSchema,
     UserSchema,
     CreateUserSchema,
-    ErrorSchema
+    ErrorSchema,
+    UserListSchema,
 } from './schemas';
 
 export const healthCheck = createRoute({
     method: 'get',
+    description: 'health check',
     path: '/health-check',
     tags: ['health'],
     responses: {
@@ -26,6 +28,7 @@ export const healthCheck = createRoute({
 export const getUserById = createRoute({
     method: 'get',
     path: '/users/{id}',
+    description: 'get user by id',
     tags: ['user'],
     security: [
         {
@@ -55,9 +58,40 @@ export const getUserById = createRoute({
     },
 });
 
+export const listUser = createRoute({
+    method: 'get',
+    description: 'list user',
+    path: '/users',
+    tags: ['user'],
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: UserListSchema,
+                },
+            },
+            description: 'retrieve user',
+        },
+        400: {
+            content: {
+                'application/json': {
+                    schema: ErrorSchema,
+                },
+            },
+            description: 'returns an error',
+        },
+    },
+});
+
 export const createUser = createRoute({
     method: 'post',
     path: '/users',
+    description: 'create user',
     tags: ['user'],
     security: [
         {
