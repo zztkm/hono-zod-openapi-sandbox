@@ -4,6 +4,7 @@ import {
     healthCheck,
     getUserById,
     createUser,
+    updateUser,
     listUser,
 } from './routes'
 
@@ -78,6 +79,27 @@ app.openapi(
             id: '123',
             name,
             age,
+        })
+    },
+    (result, c) => {
+        if (!result.success) {
+            return c.jsonT({
+                code: 400,
+                message: 'validation error',
+            }, 400)
+        }
+    }
+);
+
+app.openapi(
+    updateUser,
+    (c) => {
+        const { id } = c.req.valid('param')
+        const { name, age } = c.req.valid('json')
+        return c.jsonT({
+            id,
+            name: name ? name : 'test',
+            age: age ? age : 0,
         })
     },
     (result, c) => {

@@ -4,6 +4,7 @@ import {
     ParamsSchema,
     UserSchema,
     CreateUserSchema,
+    UpdateUserSchema,
     ErrorSchema,
     UserListSchema,
 } from './schemas';
@@ -106,6 +107,46 @@ export const createUser = createRoute({
                 },
             },
         }
+    },
+    responses: {
+        200: {
+            content: {
+                'application/json': {
+                    schema: UserSchema,
+                },
+            },
+            description: 'retrieve user',
+        },
+        400: {
+            content: {
+                'application/json': {
+                    schema: ErrorSchema,
+                },
+            },
+            description: 'returns an error',
+        },
+    },
+});
+
+export const updateUser = createRoute({
+    method: 'put',
+    path: '/users/{id}',
+    description: 'update user',
+    tags: ['user'],
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    request: {
+        params: ParamsSchema,
+        body: {
+            content: {
+                'application/json': {
+                    schema: UpdateUserSchema,
+                },
+            },
+        },
     },
     responses: {
         200: {

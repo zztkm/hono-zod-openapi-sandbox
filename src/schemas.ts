@@ -49,6 +49,16 @@ export const CreateUserSchema = z
         }),
     }).openapi('CreateUser')
 
+export const UpdateUserSchema = z
+    .object({
+        name: z.string().optional().openapi({
+            example: 'zztkm'
+        }),
+        age: z.number().optional().openapi({
+            example: 25
+        }),
+    }).openapi('UpdateUserSchema')
+
 export const ErrorSchema = z
     .object({
         code: z.number().openapi({
